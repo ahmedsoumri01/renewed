@@ -1,0 +1,167 @@
+<div class="container-fluid">
+    <app-page-title title="Factures" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+    <div class="d-xl-flex">
+        <div class="w-100">
+            <div class="d-md-flex">
+                <div class="card filemanager-sidebar me-md-2">
+                    <div class="card-body">
+
+                        <div class="d-flex flex-column h-100">
+                            <div class="mb-4">
+                                <div class="mb-3">
+                                    <div class="dropdown" dropdown>
+                                        <button class="btn btn-light dropdown-toggle w-100" dropdownToggle
+                                            type="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <i class="mdi mdi-plus me-1"></i> Ajouter facture
+                                        </button>
+                                        <div class="dropdown-menu" *dropdownMenu>
+                                            <a class="dropdown-item" href="javascript: void(0);"><i
+                                                    class="bx bx-folder me-1"></i> Dossier</a>
+                                            <a class="dropdown-item" href="javascript: void(0);"><i
+                                                    class="bx bx-file me-1"></i> Fichier</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="list-unstyled categories-list">
+
+                                    <li>
+                                        <a href="javascript: void(0);" class="text-body d-flex align-items-center">
+                                            <i class="mdi mdi-google-drive font-size-16 text-muted me-2"></i> <span
+                                                class="me-auto">Google Drive</span>
+                                        </a>
+                                    </li>
+
+
+                                    <li>
+                                        <a href="javascript: void(0);" class="text-body d-flex align-items-center">
+                                            <i class="mdi mdi-trash-can text-danger font-size-16 me-2"></i> <span
+                                                class="me-auto">Corbeille</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- filemanager-leftsidebar -->
+
+                <div class="w-100">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <div class="row mb-3">
+                                    <div class="col-xl-3 col-sm-6">
+                                        <form class="mt-4 mt-sm-0 float-sm-end d-flex align-items-center">
+                                            <div class="search-box mb-2 me-2">
+                                                <div class="position-relative">
+                                                    <input type="text"
+                                                        class="form-control bg-light border-light rounded"
+                                                        placeholder="Chercher...">
+                                                    <i class="bx bx-search-alt search-icon"></i>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+
+                                <div class="table-responsive">
+                                    <table class="table align-middle table-nowrap table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Facture</th>
+                                                <th scope="col">Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td><a href="javascript: void(0);" class="text-dark fw-medium"><i
+                                                class="mdi mdi-text-box font-size-16 align-middle text-muted me-2"></i>
+                                                facture_fournisseur.txt</a></td>
+                                              <td>10-05-2024, 11:20</td>
+                                                <td>
+                                                    <div class="dropdown" dropdown>
+                                                        <a class="font-size-16 text-muted dropdown-toggle" role="button"
+                                                            dropdownToggle data-toggle="dropdown"
+                                                            aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+
+                                                        <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
+                                                            <a class="dropdown-item" href="javascript: void(0);">Ouvrir</a>
+                                                            <a class="dropdown-item" href="javascript: void(0);">Voir Historique</a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item" href="javascript: void(0);">Payer</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="javascript: void(0);" class="text-dark fw-medium"><i
+                                                            class="mdi mdi-text-box font-size-16 align-middle text-muted me-2"></i>
+                                                        facture_fournisseur1.txt</a></td>
+                                                <td>10-05-2024, 11:32</td>
+                                                <td>
+                                                    <div class="dropdown" dropdown>
+                                                        <a class="font-size-16 text-muted dropdown-toggle" role="button"
+                                                            dropdownToggle data-toggle="dropdown"
+                                                            aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+
+                                                      <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
+                                                        <a class="dropdown-item" href="javascript: void(0);">Ouvrir</a>
+                                                        <a class="dropdown-item" href="javascript: void(0);">Voir Historique</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="javascript: void(0);">Payer</a>
+                                                      </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="javascript: void(0);" class="text-dark fw-medium"><i
+                                                            class="mdi mdi-text-box font-size-16 align-middle text-muted me-2"></i>
+                                                        facture_client.txt</a></td>
+                                                <td>09-05-2024, 15:05</td>
+                                                <td>
+                                                    <div class="dropdown" dropdown>
+                                                        <a class="font-size-16 text-muted dropdown-toggle" role="button"
+                                                            dropdownToggle data-toggle="dropdown"
+                                                            aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+
+                                                      <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
+                                                        <a class="dropdown-item" href="javascript: void(0);">Ouvrir</a>
+                                                        <a class="dropdown-item" href="javascript: void(0);">Voir Historique</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="javascript: void(0);">Payer</a>
+                                                      </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end w-100 -->
+            </div>
+        </div>
+
+
+    </div>
+    <!-- end row -->
+</div>

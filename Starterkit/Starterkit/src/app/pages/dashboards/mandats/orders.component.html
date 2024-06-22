@@ -1,0 +1,252 @@
+  <div class="container-fluid">
+    <app-page-title title="Mandats" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-2">
+              <div class="col-sm-4">
+                <div class="search-box me-2 mb-2 d-inline-block">
+                  <div class="position-relative">
+                    <input type="text" class="form-control" autocomplete="off" id="searchTableList" placeholder="Chercher..." [(ngModel)]="service.searchTerm">
+                    <i class="bx bx-search-alt search-icon"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <div class="text-sm-end">
+                  <button type="button" class="btn btn-success btn-rounded mb-2 me-2" (click)="showModal.show()"><i class="mdi mdi-plus mr-1"></i>
+                    Envoyer mandat</button>
+                </div>
+              </div><!-- end col-->
+            </div>
+            <!-- Table data -->
+            <div class="table-responsive mb-0">
+              <table class="table align-middle table-nowrap dt-responsive nowrap w-100 table-check" id="order-list">
+                <thead class="table-light">
+                  <tr>
+                    <th style="width: 20px;">
+                      <div class="form-check font-size-16 align-middle">
+                        <input class="form-check-input" type="checkbox" id="transactionCheck01" [(ngModel)]="masterSelected" (change)="checkUncheckAll($event)">
+                        <label class="form-check-label" for="transactionCheck01"></label>
+                      </div>
+                    </th>
+                    <th class="align-middle">Mandat ID</th>
+                    <th class="align-middle">nom de recepteur</th>
+                    <th class="align-middle">email de recepteur</th>
+                    <th class="align-middle">code</th>
+                    <th class="align-middle">Date</th>
+                    <th class="align-middle">Montant</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of orderes; let i = index;" id="o_{{data.id}}">
+                    <td>
+                      <div class="form-check font-size-16">
+                        <input class="form-check-input" type="checkbox" id="transactionCheck{{data.index}}" value="{{data.id}}" [(ngModel)]="data.state">
+                        <label class="form-check-label" for="transactionCheck{{data.index}}"></label>
+                      </div>
+                    </td>
+                    <td>
+                      <a href="javascript: void(0);" class="text-body fw-bold">{{data.id}}</a>
+                    </td>
+                    <td>{{data.nomRecepteur}}</td>
+                    <td>{{data.emailRecepteur}}</td>
+                    <td>{{data.code}}</td>
+                    <td>{{data.date}}</td>
+                    <td>{{data.montant}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- end table -->
+          <!-- <ul class="pagination pagination-rounded justify-content-end mb-2">
+              <pagination [totalItems]="(total | async)!" [(ngModel)]="service.page" [itemsPerPage]="service.pageSize"></pagination>
+            </ul>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Details Model -->
+  <ng-template #ViewContent role="document" let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title mt-0" id="orderdetailsModalLabel">Order Details</h5>
+      <button type="button" class="btn-close" aria-hidden="true" (click)="modalRef?.hide()"></button>
+    </div>
+    <div class="modal-body">
+      <p class="mb-2" id="orderlist-overview">
+        Product id:
+        <span class="list-id text-primary">#SK2540</span>
+      </p>
+      <p class="mb-4">
+        Billing Name:
+        <span class="orderlist-customer text-primary">Neal Matthews</span>
+      </p>
+      <div class="table-responsive">
+        <table class="table table-centered table-nowrap">
+          <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                <div>
+                  <img src="assets/images/product/img-7.png" alt class="avatar-sm" />
+                </div>
+              </th>
+              <td>
+                <div>
+                  <h5 class="text-truncate font-size-14">Wireless Headphone (Black)</h5>
+                  <p class="text-muted mb-0">$ 225 x 1</p>
+                </div>
+              </td>
+              <td>$ 255</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <div>
+                  <img src="assets/images/product/img-4.png" alt class="avatar-sm" />
+                </div>
+              </th>
+              <td>
+                <div>
+                  <h5 class="text-truncate font-size-14">Phone patterned cases</h5>
+                  <p class="text-muted mb-0">$ 145 x 1</p>
+                </div>
+              </td>
+              <td>$ 145</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0">Sub Total:</h6>
+              </td>
+              <td>$ 400</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0">Shipping:</h6>
+              </td>
+              <td>Free</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0">Total:</h6>
+              </td>
+              <td>$ 400</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="modalRef?.hide()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Order Create Model -->
+  <div bsModal #showModal="bs-modal" class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Envoyer mandat</h5>
+          <button type="button" class="btn-close" id="close-modal" (click)="showModal.hide()"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="saveMandat()" [formGroup]="ordersForm" class="needs-validation createorder-form" id="createorder-form" novalidate>
+            <div class="row">
+              <div class="col-lg-12">
+                <input type="hidden" class="form-control" id="orderid-input">
+                <div class="mb-3">
+                  <label for="nomRecepteur-field" class="form-label">Nom du récepteur</label>
+                  <input type="text" id="nomRecepteur-field" class="form-control" placeholder="Nom" required formControlName="nomRecepteur" [ngClass]="{ 'is-invalid': submitted && form['nomRecepteur'].errors }" />
+                  <div *ngIf="submitted && form['nomRecepteur'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['nomRecepteur'].errors['required']">Please enter a name.</div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="cinEmetteur-field" class="form-label">CIN de l'émetteur</label>
+                  <input type="text" id="cinEmetteur-field" class="form-control" placeholder="CIN" required formControlName="cinEmetteur" [ngClass]="{ 'is-invalid': submitted && form['cinEmetteur'].errors }" />
+                  <div *ngIf="submitted && form['cinEmetteur'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['cinEmetteur'].errors['required']">Please enter a CIN.</div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="cinRecepteur-field" class="form-label">CIN du récepteur</label>
+                  <input type="text" id="cinRecepteur-field" class="form-control" placeholder="CIN" required formControlName="cinRecepteur" [ngClass]="{ 'is-invalid': submitted && form['cinRecepteur'].errors }" />
+                  <div *ngIf="submitted && form['cinRecepteur'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['cinRecepteur'].errors['required']">Please enter a CIN.</div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="emailRecepteur-field" class="form-label">Email du récepteur</label>
+                  <input type="email" id="emailRecepteur-field" class="form-control" placeholder="Email" required formControlName="emailRecepteur" [ngClass]="{ 'is-invalid': submitted && form['emailRecepteur'].errors }" />
+                  <div *ngIf="submitted && form['emailRecepteur'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['emailRecepteur'].errors['required']">Please enter an email.</div>
+                    <div *ngIf="form['emailRecepteur'].errors['email']">Please enter a valid email.</div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="prenomRecepteur-field" class="form-label">Prénom du récepteur</label>
+                  <input type="text" id="prenomRecepteur-field" class="form-control" placeholder="Prénom" required formControlName="prenomRecepteur" [ngClass]="{ 'is-invalid': submitted && form['prenomRecepteur'].errors }" />
+                  <div *ngIf="submitted && form['prenomRecepteur'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['prenomRecepteur'].errors['required']">Please enter a prénom.</div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="montant-field" class="form-label">Montant</label>
+                  <input type="text" id="montant-field" class="form-control" placeholder="Montant" required formControlName="montant" [ngClass]="{ 'is-invalid': submitted && form['montant'].errors }" />
+                  <div *ngIf="submitted && form['montant'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['montant'].errors['required']">Please enter a montant.</div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="numCompte-field" class="form-label">Numéro de compte</label>
+                  <input type="number" id="numCompte-field" class="form-control" placeholder="Numéro de compte" required formControlName="numCompte" [ngClass]="{ 'is-invalid': submitted && form['numCompte'].errors }" />
+                  <div *ngIf="submitted && form['numCompte'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['numCompte'].errors['required']">Please enter a numéro de compte.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="text-end">
+                  <button type="button" class="btn btn-outline-secondary me-1" (click)="showModal.hide()">Annuler</button>
+                  <button type="submit" id="addNewOrder-btn" class="btn btn-success">Envoyer</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Modal -->
+  <div bsModal #removeItemModal="bs-modal" class="modal fade" id="removeItemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="modal-body px-4 py-5 text-center">
+          <button type="button" class="btn-close position-absolute end-0 top-0 m-3" (click)="removeItemModal.hide()"></button>
+          <div class="avatar-sm mb-4 mx-auto">
+            <div class="avatar-title bg-primary text-primary bg-opacity-10 font-size-20 rounded-3">
+              <i class="mdi mdi-trash-can-outline"></i>
+            </div>
+          </div>
+          <p class="text-muted font-size-16 mb-4">Are you Sure You want to Remove this Order ?</p>
+
+          <div class="hstack gap-2 justify-content-center mb-0">
+            <button type="button" class="btn btn-danger" id="remove-item" (click)="deleteOrder()">Remove Now</button>
+            <button type="button" class="btn btn-secondary" id="close-removeOrderModal" (click)="removeItemModal.hide()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end removeItemModal -->

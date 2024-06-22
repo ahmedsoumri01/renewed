@@ -1,0 +1,202 @@
+<div class="container-fluid">
+  <app-page-title title="Factures" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row mb-2">
+              <div class="mb-3 text-center">
+                <button class="btn btn-secondary" *ngIf="selected" (click)="chooseAnotherFacture()">Choose Another Facture</button>
+              </div>
+            <div class="col-sm-12 offset-sm-4 text-center"> <!-- Centered column -->
+              <div class="col-sm-4">
+                <div class="mb-3" *ngIf="!selected">
+                  <label for="status-dropdown" class="form-label">Select Status</label>
+                  <select class="form-select" id="status-dropdown" [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
+                    <option value="STEG">STEG</option>
+                    <option value="SONED">SONED</option>
+                    <option value="AUTOROUTE">AUTOROUTE</option>
+                  </select>
+                </div>
+
+            </div>
+          </div>
+          <div class="mb-3" *ngIf="selected">
+            <div class="table-responsive mb-0">
+              <table class="table align-middle table-nowrap dt-responsive nowrap w-100 table-check" id="order-list">
+                <thead class="table-light">
+                <tr>
+                  <th style="width: 20px;">
+                    <div class="form-check font-size-16 align-middle">
+                      <input class="form-check-input" type="checkbox" id="transactionCheck01" [(ngModel)]="masterSelected" (change)="checkUncheckAll($event)">
+                      <label class="form-check-label" for="transactionCheck01"></label>
+                    </div>
+                  </th>
+                  <th class="align-middle">Facture ID</th>
+                  <th class="align-middle">reference</th>
+                  <th class="align-middle">libelle</th>
+                  <th class="align-middle">Montant</th>
+                  <th class="align-middle">status</th>
+                  <th class="align-middle">operation</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of orderes; let i = index;" id="o_{{data.id}}">
+                  <td>
+                    <div class="form-check font-size-16">
+                      <input class="form-check-input" type="checkbox" id="transactionCheck{{data.index}}" value="{{data.id}}" [(ngModel)]="data.state">
+                      <label class="form-check-label" for="transactionCheck{{data.index}}"></label>
+                    </div>
+                  </td>
+                  <td>
+                    <a href="javascript: void(0);" class="text-body fw-bold">{{data.id}}</a>
+                  </td>
+                  <td>{{data.reference}}</td>
+                  <td>{{data.libelle}}</td>
+                  <td>{{data.montant}}</td>
+                  <td>
+                    <span class="badge badge-pill" [ngClass]="{'badge-soft-danger': !data.paye, 'badge-soft-success': data.paye}">
+                        {{ data.paye ? 'Payée' : 'Impayée' }}
+                    </span>
+                </td>
+                
+                  <td>
+                  
+                    
+                  
+                    <button type="button" class="btn btn-primary btn-sm btn-rounded" (click)="openViewModal(ViewContent, data.id)">
+                      Payer
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+                </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- View Details Model -->
+<ng-template #ViewContent role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title mt-0" id="orderdetailsModalLabel">Facture</h5>
+    <button type="button" class="btn-close" aria-hidden="true" (click)="modalRef?.hide()"></button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="payAmount(paymentForm.get('amount')?.value)" [formGroup]="paymentForm" class="needs-validation" id="payment-form" novalidate>
+      <div class="mb-3">
+        <label for="payment-amount" class="form-label">Montant à payer</label>
+        <input type="text" id="payment-amount" class="form-control" placeholder="Montant à payer" required formControlName="amount" [ngClass]="{ 'is-invalid': submitted && paymentForm['amount'].errors }" />
+        <div *ngIf="submitted && paymentForm['amount'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="paymentForm['amount'].errors['required']">Please enter your account id</div>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="payAmount(paymentForm.get('amount')?.value)">Payer</button>
+  </div>
+</ng-template>
+
+<!-- Order Create Model -->
+
+<div bsModal #showModal="bs-modal" class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Envoyer mandat</h5>
+        <button type="button" class="btn-close" id="close-modal" (click)="showModal.hide()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveUser()" [formGroup]="ordersForm" class="needs-validation createorder-form" id="createorder-form" novalidate>
+          <div class="row">
+            <div class="col-lg-12">
+              <input type="hidden" class="form-control" id="orderid-input">
+              <div class="mb-3">
+                <label for="customername-field" class="form-label">Nom du récepteur</label>
+                <input type="text" id="customername-field" class="form-control" placeholder="Nom" required formControlName="name" [ngClass]="{ 'is-invalid': submitted && form['name'].errors }" />
+                <div *ngIf="submitted && form['name'].errors" class="invalid-feedback" align="left">
+                  <div *ngIf="form['name'].errors['required']">Please enter a name.</div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="customername-field" class="form-label">CIN du récepteur</label>
+                <input type="text" id="customername-field" class="form-control" placeholder="CIN" required formControlName="name" [ngClass]="{ 'is-invalid': submitted && form['name'].errors }" />
+                <div *ngIf="submitted && form['name'].errors" class="invalid-feedback" align="left">
+                  <div *ngIf="form['name'].errors['required']">Please enter a name.</div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="customername-field" class="form-label">Email du récepteur</label>
+                <input type="email" id="customername-field" class="form-control" placeholder="email" required formControlName="name" [ngClass]="{ 'is-invalid': submitted && form['name'].errors }" />
+                <div *ngIf="submitted && form['name'].errors" class="invalid-feedback" align="left">
+                  <div *ngIf="form['name'].errors['required']">Please enter a name.</div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="payamount-input" class="form-label">Montant</label>
+                <input type="text" id="customername-field" class="form-control" placeholder="Montant" required formControlName="total" [ngClass]="{ 'is-invalid': submitted && form['total'].errors }" />
+                <div *ngIf="submitted && form['total'].errors" class="invalid-feedback" align="left">
+                  <div *ngIf="form['total'].errors['required']">Please enter amount.</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="mb-3">
+                <label for="paystatus-input" class="form-label">Compte</label>
+
+                <select class="form-control"name="productname-field" id="productname-field" formControlName="status" [ngClass]="{ 'is-invalid': submitted && form['status'].errors }">
+                  <option value="Chargeback">Compte 1</option>
+                  <option value="Paid" selected>Compte 2</option>
+                  <option value="Refund">Compte 3</option>
+                </select>
+                <div *ngIf="submitted && form['status'].errors" class="invalid-feedback" align="left">
+                  <div *ngIf="form['status'].errors['required']">Please select a payment status.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <div class="text-end">
+                <button type="button" class="btn btn-outline-secondary me-1" (click)="showModal.hide()">Annuler</button>
+                <button type="submit" id="addNewOrder-btn" class="btn btn-success">Envoyer</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- end modal body -->
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+<!-- Modal -->
+<div bsModal #removeItemModal="bs-modal" class="modal fade" id="removeItemModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-body px-4 py-5 text-center">
+        <button type="button" class="btn-close position-absolute end-0 top-0 m-3" (click)="removeItemModal.hide()"></button>
+        <div class="avatar-sm mb-4 mx-auto">
+          <div class="avatar-title bg-primary text-primary bg-opacity-10 font-size-20 rounded-3">
+            <i class="mdi mdi-trash-can-outline"></i>
+          </div>
+        </div>
+        <p class="text-muted font-size-16 mb-4">Are you Sure You want to Remove this Order ?</p>
+
+        <div class="hstack gap-2 justify-content-center mb-0">
+          <button type="button" class="btn btn-danger" id="remove-item" (click)="deleteOrder()">Remove Now</button>
+          <button type="button" class="btn btn-secondary" id="close-removeOrderModal" (click)="removeItemModal.hide()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end removeItemModal -->

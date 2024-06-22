@@ -1,0 +1,86 @@
+<div class="account-pages my-5 pt-sm-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6 col-xl-5">
+        <div class="card overflow-hidden">
+          <div class="bg-primary-color">
+            <div class="row">
+              <div class="col-7">
+                <div class="p-4">
+                  <h5 style="color: #2a3042">User Infos</h5>
+                </div>
+              </div>
+              <div class="col-5 align-self-end">
+              </div>
+            </div>
+          </div>
+          <div class="card-body pt-0">
+            <div>
+              <a routerLink="/">
+                <div class="avatar-md profile-user-wid mb-8">
+                  <span class="avatar-title bg-light">
+                    <img src="assets/images/favicon.ico" alt="" class="" height="30">
+                  </span>
+                </div>
+              </a>
+            </div>
+            <div class="p-2">
+              <div>
+                <alert type="success" *ngIf="successmsg" [dismissible]="false">Information updated successfully.</alert>
+                <alert type="danger" *ngIf="error" [dismissible]="false">{{ error }}</alert>
+                <form name="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
+                  <div class="mb-3">
+                    <label for="nom" class="form-label">Nom</label>
+                    <input type="text" formControlName="nom" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.nom.errors }" id="nom"
+                      [placeholder]="userData.nom ? userData.nom : 'Enter your last name'"/>
+                    <div *ngIf="submitted && f.nom.errors" class="invalid-feedback">
+                      <div *ngIf="f.nom.errors.required">Last name is required</div>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="prenom" class="form-label">Prénom</label>
+                    <input type="text" formControlName="prenom" class="form-control" id="prenom"
+                      [placeholder]="userData.prenom ? userData.prenom : 'Enter your first name'" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="telephone" class="form-label">Téléphone</label>
+                    <input type="tel" formControlName="telephone" class="form-control" id="telephone"
+                      [placeholder]="userData.telephone ? userData.telephone : 'Enter your telephone number'" />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" formControlName="email" [readonly]="true" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.email.errors }" id="email"
+                      [placeholder]="userData.email ? userData.email : 'Enter your email'" />
+                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                      <div *ngIf="f.email.errors.required">Email is required</div>
+                      <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" formControlName="password" class="form-control" id="password"
+                      placeholder="Enter your password" />
+                  </div>
+                  <div class="mt-4 d-grid">
+                    <button type="submit" class="btn-color">Save</button>
+                  </div>
+                </form>
+                <div class="mt-4 text-center">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end card -->
+        <div class="mt-5 text-center">
+          <p>Return to <a routerLink="/account/login" class="fw-medium text-primary">Login</a></p>
+        </div>
+      </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+  </div>
+  <!-- end container -->
+</div>

@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <h1>Clients</h1>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+          <div *ngIf="!(loading$ | async)" class="table-responsive">
+            <table class="table align-middle table-nowrap dt-responsive nowrap w-100" id="customerList-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Numéro</th>
+                  <th>Nom complet</th>
+                  <th>Email</th>
+                  <th>Type</th>
+                  <th>Solde</th>
+                  <th>État</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let customer of customers$ | async" id="c_{{customer.id}}">
+                  <td>{{ customer.id }}</td>
+                  <td>{{ customer.numCompte }}</td>
+                  <td>{{ customer.ownerName }}</td>
+                  <td>{{ customer.ownerEmail }}</td>
+                  <td>{{ customer.compteType }}</td>
+                  <td>{{ customer.solde }} dt</td>
+                  <td>{{ customer.etat }}</td>
+                  <td>
+                    <div class="action-link">
+                      <a *ngIf="customer.etat === 'INACTIVE'" href="javascript:void(0);" class="dropdown-item" (click)="handleUnblockCustomer(customer)">
+                        <i class="fas fa-pencil-alt text-success me-1"></i> Débloquer
+                      </a>
+                      <a *ngIf="customer.etat === 'ACTIVE'" href="javascript:void(0);" class="dropdown-item" (click)="handleBlockCustomer(customer)">
+                        <i class="fas fa-trash-alt text-danger me-1"></i> Bloquer
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="loading$ | async" class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

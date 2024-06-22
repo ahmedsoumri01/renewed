@@ -1,0 +1,236 @@
+<div class="container-fluid">
+  <!--  <app-page-title title="Orders" [breadcrumbItems]="breadCrumbItems"></app-page-title>-->
+    <h1>Comptes</h1>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-2">
+             <div class="col-sm-4">
+                <div class="search-box me-2 mb-2 d-inline-block">
+                  <div class="position-relative">
+                    <form [formGroup]="accountFormGroup" (ngSubmit)="handleSearchBankAccount()">
+                      <input type="text" class="form-control" autocomplete="off" id="searchTableList" placeholder="Compte ID..." formControlName="accountId">
+                      <button type="button" class="btn info btn-rounded"><i class="bx bx-search-alt search-icon"></i></button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="col-sm-2">
+                <div class="text-sm-end">
+                  <button type="button" class="btn btn-success btn-rounded mb-2 me-2" (click)="showModal.show()"><i class="mdi mdi-plus mr-1"></i>
+                    Nouveau compte</button>
+                </div>
+              </div>
+              <!-- end col-->
+            </div>
+            <!-- Table data -->
+            <ng-template #errorTemplate>
+              <ng-container *ngIf="errorMessage">{{errorMessage}}</ng-container>
+            </ng-template>
+            <div class="table-responsive mb-0" *ngIf="accounts; else errorTemplate">
+              <table class="table align-middle table-nowrap dt-responsive nowrap w-100 table-check" id="order-list">
+                <thead class="table-light">
+                  <tr>
+                    <th class="align-middle">ID Compte</th>
+                    <th class="align-middle">Numero de compte</th>
+                    <th class="align-middle">Date de création</th>
+                    <th class="align-middle">Solde</th>
+                    <th class="align-middle">Type compte</th>
+                    <th class="align-middle">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of accounts | async; let i = index;" id="o_{{data.id}}">
+                    <td>
+                      <a href="javascript: void(0);" class="text-body fw-bold">{{data.id}}</a>
+                    </td>
+                    <td>{{data.numCompte}}</td>
+                    <td>{{data.dateOuverture | date: 'dd-MM-yyyy'}}</td>
+                    <td>{{data.solde | number : '1.2-2'}}</td>
+                    <td> <p *ngIf="data.compteType === 'EPARGNE'">Épargne</p>
+                      <p *ngIf="data.compteType === 'COURANT'">Courant</p>
+                      </td>
+                    <td>
+                      <div class="dropdown" dropdown placement="bottom-right">
+                        <a href="javascript: void(0);" class="dropdown-toggle card-drop" data-toggle="dropdown"
+                           dropdownToggle aria-expanded="false">
+                          <i class="mdi mdi-dots-horizontal font-size-18"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" *dropdownMenu>
+                          <li><a href="javascript: void(0);" class="dropdown-item" (click)="openCreditModal(data.numCompte,'Retrait')"><i
+                            class="fa fa-credit-card" aria-hidden="true"></i>
+                            Retrait</a></li>
+                            <li><a href="javascript: void(0);" class="dropdown-item" (click)="openCreditModal(data.numCompte,'CREDIT')"><i
+                              class="fas fa-money" aria-hidden="true"></i>
+                            Versement</a></li>
+                            <li><a href="javascript: void(0);" class="dropdown-item" (click)="openCreditModal(data.numCompte,'TRANSFER')">
+                              <i class="fa fa-arrows-h" aria-hidden="true"></i>
+                            Transfert</a></li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- end table -->
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- View Details Model -->
+  <ng-template #ViewContent role="document" let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title mt-0" id="orderdetailsModalLabel">Détails du compte</h5>
+      <button type="button" class="btn-close" aria-hidden="true" (click)="modalRef?.hide()"></button>
+    </div>
+    <div class="modal-body" *ngIf="accountObservable | async as accountDetails">
+      <p class="mb-2" id="orderlist-overview">Compte ID:
+        <span class="list-id text-primary">{{accountDetails.accountId}}</span>
+      </p>
+      <p class="mb-2" id="orderlist-balance">Compte ID:
+        <span class="list-id text-primary">{{accountDetails.balance | number : '1.2-2'}}</span>
+      </p>
+      <div class="table-responsive">
+        <table class="table table-centered table-nowrap">
+          <thead>
+            <tr>
+              <th scope="col">ID Opération</th>
+              <th scope="col">Date</th>
+              <th scope="col">Type</th>
+              <th scope="col">Montant</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let op of accountDetails.accountOperationDTOS">
+              <td>{{op.id}}</td>
+              <td>{{op.operationDate | date: 'dd-MM-yyyy' }}</td>
+              <td>{{op.type}}</td>
+              <td>{{op.amount | number : '1.2-2'}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <ul class="nav nav-pills">
+          <li *ngFor="let item of [].constructor(accountDetails.totalPages); let page=index">
+            <a [ngClass]="page==currentPage?'btn-info':'btn-outline-info'" (click)="goToPage(page,accountDetails.accountId)" class="btn ms-1 mt-1">{{page}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="modalRef?.hide()">Fermer</button>
+    </div>
+  </ng-template>
+  
+  <!-- Order Create Model -->
+  
+  <div bsModal #showModal="bs-modal" class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Nouveau compte</h5>
+          <button type="button" class="btn-close" id="close-modal" (click)="showModal.hide()"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="saveUser()" [formGroup]="ordersForm" class="needs-validation createorder-form" id="createorder-form" novalidate>
+            <div class="row">
+              <div class="col-lg-12">
+                <input type="hidden" class="form-control" id="orderid-input">
+                <div class="col-lg-6">
+                  <div class="mb-3">
+                    <label for="paystatus-input" class="form-label">Type compte</label>
+  
+                    <select class="form-control"name="productname-field" id="productname-field" formControlName="status" [ngClass]="{ 'is-invalid': submitted && form['status'].errors }">
+                      <option value="COURANT" selected>Courant</option>
+                      <option value="EPARGNE" selected>Epargne</option>
+                    </select>
+                  </div>
+                </div>
+                </div>
+              <div class="col-lg-12">
+                <div class="text-end">
+                  <button type="button" class="btn btn-outline-secondary me-1" (click)="showModal.hide()">Annuler</button>
+                  <button type="submit" id="addNewOrder-btn" class="btn btn-success">Créer</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- end modal body -->
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+  
+  
+  <!-- Operation Modal -->
+   
+  <div bsModal #showModalDebit="bs-modal" class="modal fade" id="showModalDebit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Opération</h5>
+          <button type="button" class="btn-close" id="close-modal" (click)="showModalDebit.hide()"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="handleAccountOperation()" [formGroup]="operationFormGroup" class="needs-validation createorder-form" id="createop-form" novalidate method="post">
+            <div class="row">
+              <div class="col-lg-12">
+                <input type="hidden" class="form-control" id="debitId-input">
+                <div class="mb-3"  *ngIf="operation=='TRANSFER'">
+                  <label for="account-field" class="form-label">Compte Destination:</label>
+                  <input type="text" id="account-field" class="form-control" placeholder="Compte ID" required formControlName="accountDestination" />
+                  <div *ngIf="submitted && form['accountDestination'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['accountDestination'].errors['required']">Please enter an accountDestination.</div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="amount-field" class="form-label">Montant:</label>
+                  <input type="text" id="amount-field" class="form-control" placeholder="Entrer montant" required formControlName="amount" />
+                  <div *ngIf="submitted && form['amount'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['amount'].errors['required']">Please enter an amount.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="text-end">
+                  <button type="button" class="btn btn-outline-secondary me-1" (click)="showModalDebit.hide()">Annuler</button>
+                  <button type="submit" id="addNewOp-btn" class="btn btn-success">Enregistrer</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+  
+  <!-- Modal -->
+  <div bsModal #removeItemModal="bs-modal" class="modal fade" id="removeItemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="modal-body px-4 py-5 text-center">
+          <button type="button" class="btn-close position-absolute end-0 top-0 m-3" (click)="removeItemModal.hide()"></button>
+          <div class="avatar-sm mb-4 mx-auto">
+            <div class="avatar-title bg-primary text-primary bg-opacity-10 font-size-20 rounded-3">
+              <i class="mdi mdi-trash-can-outline"></i>
+            </div>
+          </div>
+          <p class="text-muted font-size-16 mb-4">Are you Sure You want to Remove this Order ?</p>
+  
+          <div class="hstack gap-2 justify-content-center mb-0">
+            <button type="button" class="btn btn-danger" id="remove-item" (click)="deleteOrder()">Remove Now</button>
+            <button type="button" class="btn btn-secondary" id="close-removeOrderModal" (click)="removeItemModal.hide()">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end removeItemModal -->
+  

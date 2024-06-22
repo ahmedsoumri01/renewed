@@ -1,0 +1,52 @@
+<div class="navbar">
+  <!-- LOGO -->
+  <div class="navbar-brand-box">
+     <a routerLink="/" class="logo logo-dark">
+       <span class="logo-sm">
+         <img src="../../assets/images/logo-bna.png" alt="" height="55">
+       </span>
+       <span class="logo-lg">
+         <img src="../../assets/images/logo-bna.png" alt="" height="60">
+       </span>
+     </a>
+   </div>
+  <div class="navbar-links">
+    <a href="#">Accueil</a>
+    <a href="#">Services</a>
+    <a href="#">Partenaires</a>
+    <a href="account/login">Login</a>
+  </div>
+</div>
+
+<div class="carousel">
+  <div class="slides" [style.transform]="'translateX(-' + currentSlide * 100 + '%)'">
+    <div class="slide" *ngFor="let slide of slides">
+      <img [src]="slide.image" [alt]="slide.alt">
+    </div>
+  </div>
+  <button (click)="prevSlide()" class="carousel-control prev">&lt;</button>
+  <button (click)="nextSlide()" class="carousel-control next">&gt;</button>
+</div>
+
+<div class="container">
+
+  <h2>Services</h2>
+  <div class="card-container">
+    <div class="card" *ngFor="let service of services">
+      <img [src]="service.image" alt="{{service.name}}">
+      <h4>{{service.name}}</h4>
+      <p>{{service.description}}</p>
+    </div>
+  </div>
+
+  <h2>Partenaires</h2>
+  <div class="card-container">
+    <div class="card" *ngFor="let partenaire of partenaires">
+
+      <img [src]="partenaire.image" alt="{{partenaire.name}}">
+      <h4>{{partenaire.name}}</h4>
+    </div>
+  </div>
+
+
+</div>
